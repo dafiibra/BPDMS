@@ -77,3 +77,35 @@ export function useDanaChart(groupBy = 'MONTHLY') {
 export function useDanaComposition() {
   return useFetch<DanaComposition>(p => danaApi.getComposition(p));
 }
+
+export function useDanaDetail(
+  detailLevel: 'AREA' | 'BRANCH',
+  metric: 'AVG_BAL' | 'END_BAL',
+) {
+  const params = useLevel();
+  const [data, setData] = useState<import('../api/danaApi').DanaDetail | null>(null);
+  const [status, setStatus] = useState<Status>('idle');
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    if (!params) return;
+    abortRef.current?.abort();
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
+    setStatus('loading');
+    danaApi
+      .getDetail({...params, detailLevel, metric})
+      .then(d => {
+        if (ctrl.signal.aborted) return;
+        setData(d);
+        setStatus('success');
+      })
+      .catch(() => {
+        if (!ctrl.signal.aborted) setStatus('error');
+      });
+    return () => ctrl.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params?.level, params?.levelId, params?.snapshotDate, params?.periodCode, detailLevel, metric]);
+
+  return {data, status, loading: status === 'loading'};
+}

@@ -1,6 +1,7 @@
-import React from 'react';
-import {ActivityIndicator, View, Text, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {ActivityIndicator, TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import Svg, {Path, Circle} from 'react-native-svg';
+import DanaDetailModal from './DanaDetailModal';
 import {useDanaSummary, useDanaGrowth} from '../../hooks/useDana';
 import {
   formatRupiah,
@@ -36,6 +37,7 @@ const InfoIcon: React.FC = () => (
 );
 
 const HeroSection: React.FC = () => {
+  const [detailVisible, setDetailVisible] = useState(false);
   const {data: summary, loading: loadingSummary} = useDanaSummary();
   const {data: growth, loading: loadingGrowth} = useDanaGrowth();
 
@@ -115,10 +117,19 @@ const HeroSection: React.FC = () => {
 
       <View style={styles.growthHeader}>
         <Text style={styles.growthTitle}>Pertumbuhan Ending Balance</Text>
-        <View style={styles.infoIconWrap}>
+        <TouchableOpacity
+          onPress={() => setDetailVisible(true)}
+          style={styles.infoIconWrap}
+          hitSlop={8}
+          activeOpacity={0.7}>
           <InfoIcon />
-        </View>
+        </TouchableOpacity>
       </View>
+
+      <DanaDetailModal
+        visible={detailVisible}
+        onClose={() => setDetailVisible(false)}
+      />
 
       <View style={styles.badgesRow}>
         {growthBadges.map((badge, i) => (
