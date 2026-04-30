@@ -1,0 +1,21 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:oracle:thin:@s0c4x80s30al61tl_tp?TNS_ADMIN=/opt/wallet}
+    username: ${DB_USERNAME:BRANCHPERFDB}
+    password: ${DB_PASSWORD:Jaka!Rta4849}
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        default_schema: BRANCHPERFDB
+
+logging:
+  level:
+    com.mandiri: INFO

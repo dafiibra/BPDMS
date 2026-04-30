@@ -1,0 +1,8 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/api/v1/org/regions"
+healthcheckTimeout = 60
+restartPolicyType = "on_failure"

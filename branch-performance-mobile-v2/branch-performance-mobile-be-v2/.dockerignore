@@ -1,0 +1,6 @@
+.mvn/
+mvnw
+mvnw.cmd
+*.md
+.gitignore
+target/
